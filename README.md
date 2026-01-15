@@ -15,18 +15,25 @@ The service ingests webhook messages securely, stores them idempotently, exposes
 ---
 
 ## 📁 Project Structure
-.
+
+```text
+lyftr-ai-backend/
 ├── app/
-│ ├── main.py # API routes
-│ ├── config.py # Environment config
-│ ├── db.py # Database logic
-│ ├── models.py # Request validation
-│ └── metrics.py # Prometheus-style metrics
-├── data/ # SQLite DB (volume)
+│   ├── __init__.py
+│   ├── main.py        # API routes
+│   ├── config.py     # Environment configuration
+│   ├── db.py         # Database logic
+│   ├── models.py     # Request & response models
+│   └── metrics.py    # Prometheus-style metrics
+│
+├── data/
+│   └── app.db        # SQLite database (Docker volume)
+│
 ├── Dockerfile
 ├── docker-compose.yml
 ├── requirements.txt
 └── README.md
+
 
 ## ⚙️ Prerequisites
 - Git
@@ -34,82 +41,101 @@ The service ingests webhook messages securely, stores them idempotently, exposes
 
 ---
 
-## ▶️ Run the Project (Recommended)
-
-```bash
-git clone <repository-url>
-cd <repository-folder>
+▶️ Run the Project (Recommended)
+git clone https://github.com/ayushsingh0104/lyftr-ai-backend.git
+cd lyftr-ai-backend
 docker compose up --build
 
-
-
-On success:
+On Success
 
 Uvicorn running on http://0.0.0.0:8000
 
 
-Open:
+Open API Docs
 
-http://localhost:8000/docs
-
-
-Stop the service:
-
-CTRL + C
-docker compose down
+Swagger UI: http://localhost:8000/docs
 
 
-🔗 API Endpoints
-Health
+🔌 API Endpoints
+Health Checks
 
-GET /health/live
+| Method | Endpoint        | Description     |
+| ------ | --------------- | --------------- |
+| GET    | `/health/live`  | Liveness probe  |
+| GET    | `/health/ready` | Readiness probe |
 
-GET /health/ready
 
 Webhook
 
-POST /webhook
+| Method | Endpoint   |
+| ------ | ---------- |
+| POST   | `/webhook` |
 
-Secured via HMAC-SHA256
+1.Secured using HMAC-SHA256
+2.Requires header: X-Signature
+3.Idempotent message storage
 
-Header: X-Signature
 
 Messages
 
-GET /messages
+| Method | Endpoint    |
+| ------ | ----------- |
+| GET    | `/messages` |
 
-Supports limit, offset, from, since, q
+Query Parameters
+
+1.limit
+2.offset
+3.from
+since
+5.q
 
 Stats
 
-GET /stats
+| Method | Endpoint |
+| ------ | -------- |
+| GET    | `/stats` |
 
 Aggregated message analytics
 
+
 Metrics
 
-GET /metrics
+| Method | Endpoint   |
+| ------ | ---------- |
+| GET    | `/metrics` |
 
-Prometheus-style plain text metrics
-
+Prometheus-style plaintext metrics
 
 
 🔐 Environment Variables
 
-Configured via Docker Compose:
+Configured via Docker Compose
+| Variable         | Description              |
+| ---------------- | ------------------------ |
+| `WEBHOOK_SECRET` | HMAC verification secret |
+| `DATABASE_URL`   | SQLite database path     |
 
-Variable	Description
-WEBHOOK_SECRET	HMAC verification secret
-DATABASE_URL	SQLite database path
+
+🛑 Stop the Services
+ 
+docker compose down
 
 
-💾 Data Persistence
+📌 Notes for Reviewers
 
-SQLite DB stored in data/
+1.Dockerized multi-stage build
 
-Persists across container restarts
+2.Non-root container execution
+
+3.Clean separation of concerns
+
+Idempotent webhook handling
+
+5.Metrics aligned with Prometheus scraping
+
 
 👤 Author
 
 Ayush Kumar Singh
-Backend Engineer Candidate
+GitHub: https://github.com/ayushsingh0104
