@@ -85,6 +85,18 @@ uvicorn app.main:app --reload
 
 ---
 
+## API Documentation (Swagger UI)
+
+Once the service is running, interactive API documentation is available at:
+
+http://localhost:8000/docs
+
+This interface allows testing all endpoints including `/webhook`, `/messages`, `/stats`, and `/metrics`.
+
+![Swagger UI – Lyftr AI Backend](docs/swagger-ui.png)
+
+---
+
 ## API Overview
 
 ### Health Checks
