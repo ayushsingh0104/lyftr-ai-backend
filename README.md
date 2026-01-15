@@ -1,6 +1,6 @@
 # Lyftr AI – Backend Assignment
 
-FastAPI-based backend service for securely ingesting webhook messages, storing them idempotently, and exposing analytics, health checks, and metrics.
+Production-style FastAPI backend for securely ingesting webhook messages, storing them idempotently, and exposing analytics, health checks, and Prometheus metrics.
 
 ---
 
@@ -95,6 +95,7 @@ uvicorn app.main:app --reload
 - `POST /webhook`
 - Secured using HMAC-SHA256
 - Idempotent message ingestion
+- - Webhook ingestion is **idempotent** using `message_id` to safely handle retries
 
 ### Messages
 - `GET /messages`
@@ -125,3 +126,10 @@ Configured via Docker Compose or local shell:
 - Secure webhook verification
 - Idempotent data storage
 - Designed for clarity and production readiness
+
+---
+
+## Production Notes
+
+- Designed to be stateless and horizontally scalable
+- SQLite is used for simplicity; can be replaced with PostgreSQL without API changes
