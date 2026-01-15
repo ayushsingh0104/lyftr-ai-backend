@@ -1,72 +1,127 @@
-# Lyftr AI — Backend Engineer Assignment
+# Lyftr AI – Backend Assignment
 
-This repository contains the implementation of the **Lyftr AI Backend Engineer assignment** using **FastAPI**.  
-The service ingests webhook messages securely, stores them idempotently, exposes analytics, and is fully **Dockerized**.
+FastAPI-based backend service for securely ingesting webhook messages, storing them idempotently, and exposing analytics, health checks, and metrics.
 
 ---
 
-## 🚀 Tech Stack
+## Tech Stack
+
 - Python 3.11
 - FastAPI
-- Pydantic
 - SQLite
 - Docker & Docker Compose
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
-```text
-lyftr-ai-backend/
-├── app/
-│   ├── __init__.py
-│   ├── main.py        # API routes
-│   ├── config.py     # Environment configuration
-│   ├── db.py         # Database logic
-│   ├── models.py     # Request & response models
-│   └── metrics.py    # Prometheus-style metrics
-│
-├── data/
-│   └── app.db        # SQLite database (Docker volume)
-│
-├── Dockerfile
-├── docker-compose.yml
-├── requirements.txt
-└── README.md
+```
+app/
+├── main.py        # API routes & middleware
+├── config.py      # Environment configuration
+├── db.py          # Database logic
+├── models.py      # Request validation
+└── metrics.py     # Prometheus-style metrics
 
+data/
+└── app.db         # SQLite database (Docker volume)
 
-## ⚙️ Prerequisites
+Dockerfile
+docker-compose.yml
+requirements.txt
+```
+
+---
+
+## Prerequisites
+
 - Git
 - Docker Desktop
 
 ---
 
-▶️ Run the Project (Recommended)
+## Run the Project (Recommended)
 
-## 🚀 Running the Service
-
-### 1. Clone the repository
 ```bash
 git clone https://github.com/ayushsingh0104/lyftr-ai-backend.git
 cd lyftr-ai-backend
-
-
-2. Start the service using Docker (recommended)
 docker compose up --build
+```
 
-On success, the API will be available at:
-http://localhost:8000
+Service will be available at:
 
+- API: http://localhost:8000
+- Swagger UI: http://localhost:8000/docs
 
-3. Verify the service
-curl http://localhost:8000/health/live
-curl http://localhost:8000/health/ready
+Stop the service:
 
-Expected response:
-{ "status": "ok" }
-
-4. View API documentation
-http://localhost:8000/docs
-
-5. Stop the service
+```bash
 docker compose down
+```
+
+---
+
+## Local Development (Optional)
+
+If you want to run or extend the service without Docker:
+
+```bash
+python -m venv venv
+venv\Scripts\activate        # Windows
+pip install -r requirements.txt
+```
+
+Set required environment variable:
+
+```bash
+set WEBHOOK_SECRET=testsecret    # Windows PowerShell
+```
+
+Run the server:
+
+```bash
+uvicorn app.main:app --reload
+```
+
+---
+
+## API Overview
+
+### Health Checks
+- `GET /health/live`
+- `GET /health/ready`
+
+### Webhook
+- `POST /webhook`
+- Secured using HMAC-SHA256
+- Idempotent message ingestion
+
+### Messages
+- `GET /messages`
+- Supports pagination and filtering
+
+### Stats
+- `GET /stats`
+- Aggregated message analytics
+
+### Metrics
+- `GET /metrics`
+- Prometheus-compatible metrics
+
+---
+
+## Environment Variables
+
+Configured via Docker Compose or local shell:
+
+- `WEBHOOK_SECRET` – HMAC verification secret
+- `DATABASE_URL` – SQLite database path
+
+---
+
+## Notes
+
+- Fully Dockerized
+- Secure webhook verification
+- Idempotent data storage
+- Designed for clarity and production readiness
