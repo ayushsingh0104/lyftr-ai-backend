@@ -42,100 +42,31 @@ lyftr-ai-backend/
 ---
 
 ▶️ Run the Project (Recommended)
+
+## 🚀 Running the Service
+
+### 1. Clone the repository
+```bash
 git clone https://github.com/ayushsingh0104/lyftr-ai-backend.git
 cd lyftr-ai-backend
+
+
+2. Start the service using Docker (recommended)
 docker compose up --build
 
-On Success
-
-Uvicorn running on http://0.0.0.0:8000
-
-
-Open API Docs
-
-Swagger UI: http://localhost:8000/docs
+On success, the API will be available at:
+http://localhost:8000
 
 
-🔌 API Endpoints
-Health Checks
+3. Verify the service
+curl http://localhost:8000/health/live
+curl http://localhost:8000/health/ready
 
-| Method | Endpoint        | Description     |
-| ------ | --------------- | --------------- |
-| GET    | `/health/live`  | Liveness probe  |
-| GET    | `/health/ready` | Readiness probe |
+Expected response:
+{ "status": "ok" }
 
+4. View API documentation
+http://localhost:8000/docs
 
-Webhook
-
-| Method | Endpoint   |
-| ------ | ---------- |
-| POST   | `/webhook` |
-
-1.Secured using HMAC-SHA256
-2.Requires header: X-Signature
-3.Idempotent message storage
-
-
-Messages
-
-| Method | Endpoint    |
-| ------ | ----------- |
-| GET    | `/messages` |
-
-Query Parameters
-
-1.limit
-2.offset
-3.from
-since
-5.q
-
-Stats
-
-| Method | Endpoint |
-| ------ | -------- |
-| GET    | `/stats` |
-
-Aggregated message analytics
-
-
-Metrics
-
-| Method | Endpoint   |
-| ------ | ---------- |
-| GET    | `/metrics` |
-
-Prometheus-style plaintext metrics
-
-
-🔐 Environment Variables
-
-Configured via Docker Compose
-| Variable         | Description              |
-| ---------------- | ------------------------ |
-| `WEBHOOK_SECRET` | HMAC verification secret |
-| `DATABASE_URL`   | SQLite database path     |
-
-
-🛑 Stop the Services
- 
+5. Stop the service
 docker compose down
-
-
-📌 Notes for Reviewers
-
-1.Dockerized multi-stage build
-
-2.Non-root container execution
-
-3.Clean separation of concerns
-
-Idempotent webhook handling
-
-5.Metrics aligned with Prometheus scraping
-
-
-👤 Author
-
-Ayush Kumar Singh
-GitHub: https://github.com/ayushsingh0104
